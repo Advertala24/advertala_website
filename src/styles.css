@@ -66,16 +66,9 @@ h2 { font-size: clamp(26px, 3vw, 36px); margin: 0 0 18px; }
 .legal h3 { margin: 28px 0 6px; font-size: 18px; }
 .legal li { margin-bottom: 6px; }
 
-.contact-form { display: grid; gap: 18px; margin-top: 24px; }
-.contact-form label { display: grid; gap: 6px; font-weight: 500; }
-.contact-form .captcha { display: flex; align-items: center; gap: 10px; }
-.contact-form .captcha input { width: 90px; }
-.contact-form input, .contact-form textarea {
   padding: 12px 14px; border: 1px solid #d5d5e0; border-radius: 8px; font: inherit; background: #fafafa;
 }
-.contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--purple); background: #fff; }
-.contact-form .btn { justify-self: start; }
-.error { color: #c0172b; margin: 0; }
+.contact-email { margin-top: 18px; color: var(--muted); }
 
 .site-footer { background: #1f1f2e; color: #c9c9d6; padding: 30px 0; text-align: center; font-size: 14px; }
 .site-footer nav { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }

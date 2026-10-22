@@ -12,5 +12,5 @@ React (Vite) clone of advertala.net.
     # or: docker compose up --build
 
 ## Notes
-- Contact form has no backend; it validates the captcha and opens a `mailto:` to info@advertala.net.
+- Contact page is a simple "Email us" button that opens the visitor's mail app (`mailto:info@advertala.net`).
 - Outbrain/Taboola/TikTok logos and platform icons are text placeholders; drop real images into `public/images/`.
