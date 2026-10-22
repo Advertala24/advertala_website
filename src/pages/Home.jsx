@@ -4,9 +4,9 @@ const platforms = ['Windows', 'macOS', 'Android', 'iOS', 'Chrome', 'Firefox', 'E
 const networks = [
   { name: 'Google', src: '/images/google.png' },
   { name: 'Facebook', src: '/images/facebook.png' },
-  { name: 'Outbrain', text: 'Outbrain' },
-  { name: 'Taboola', text: 'taboola' },
-  { name: 'TikTok', text: 'TikTok' },
+  { name: 'Outbrain', src: '/images/outbrain.png' },
+  { name: 'Taboola', src: '/images/taboola.png' },
+  { name: 'TikTok', src: '/images/tiktok.png' },
 ];
 
 export default function Home() {
@@ -63,9 +63,7 @@ export default function Home() {
               functionalities.
             </p>
           </div>
-          <ul className="chips big">
-            <li>Bing</li><li>Yahoo</li><li>Google</li>
-          </ul>
+          <img className="side-img" src="/images/search.jpg" alt="Search monetisation" />
         </div>
       </section>
 
@@ -102,7 +100,7 @@ export default function Home() {
           <ul className="networks">
             {networks.map((n) => (
               <li key={n.name}>
-                {n.src ? <img src={n.src} alt={n.name} /> : <span>{n.text}</span>}
+                <img src={n.src} alt={n.name} />
               </li>
             ))}
           </ul>
