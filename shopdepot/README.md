@@ -31,25 +31,28 @@ partner's *For Advertisers* PDF; the privacy page links to the partner's privacy
 ## Run
 
     cp .env.example .env      # set MWG_KEY
-    npm install && npm run build
-    set -a; . ./.env; set +a; npm start         # http://localhost:3000
+    npm run dev               # install, build, start on :3000 (loads .env)
+    npm run dev:mock          # same, but replays the saved sample (no key or network needed)
 
-Docker:
+Docker: `docker compose up --build` (reads `.env`, serves :3000), or `npm run docker:build && npm run docker:run`.
 
-    docker compose up --build                   # reads .env, http://localhost:3000
+## Scripts
 
-Tests: `npm test`.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` / `dev:mock` | Build and run locally, with the real API or the saved sample |
+| `npm test` | Parser and beacon unit tests |
+| `npm run smoke -- <base-url> ["query"]` | Checks a running lander: beacon first and filled in, ads present, pages return 200. Run it against the deployed URL before sending it to the partner |
+| `npm run listings -- "family vacations" [client_ip]` | Raw listings XML via curl |
+| `npm run report -- [start] [end]` | Earnings report JSON via curl (default: yesterday) |
+| `npm run mock` | Fake listings API on :4999 |
+
+`listings` and `report` read `MWG_KEY` from the environment or `.env`.
 
 ## Deploy / DNS
 
 Point `marketplace.shopdepot.us` at the host running this container (A record to its public IP, or a CNAME to its hostname)
 and terminate TLS in front of it (the page must be served over HTTPS). Keep the proxy passing the real client IP in
 `X-Forwarded-For`; the API needs the visitor's IP, not the server's.
-
-## cURL helpers
-
-    export MWG_KEY=...                                   # never commit this
-    ./scripts/listings.sh "family vacations"             # raw listings XML
-    ./scripts/report.sh 2024-06-05 2024-06-05            # earnings report (JSON)
 
 The report endpoint is intentionally not exposed by the web app, since it uses the same key.

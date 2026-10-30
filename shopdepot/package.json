@@ -8,7 +8,13 @@
     "start": "node server/index.js",
     "test": "node --test server/xml.test.js",
     "report": "bash scripts/report.sh",
-    "listings": "bash scripts/listings.sh"
+    "listings": "bash scripts/listings.sh",
+    "dev": "bash scripts/dev.sh",
+    "dev:mock": "bash scripts/dev.sh --mock",
+    "mock": "node scripts/mock-api.mjs",
+    "smoke": "bash scripts/smoke.sh",
+    "docker:build": "docker build -t shopdepot-lander .",
+    "docker:run": "docker run --rm -p 3000:3000 --env-file .env shopdepot-lander"
   },
   "dependencies": {
     "express": "^4.21.1",
