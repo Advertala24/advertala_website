@@ -1,83 +1,88 @@
-import { XMLParser } from 'fast-xml-parser';
+/**
+ * Tolerant parser for the listings response.
+ *
+ * The API returns XML-ish text that is not well-formed: attribute values hold
+ * raw "<b>" tags, HTML entities such as &mdash; that XML does not define, and
+ * bare "&" in text. A strict XML parser rejects that, so the few elements we
+ * need are extracted directly.
+ */
 
-const parser = new XMLParser({
-  ignoreAttributes: false,
-  attributeNamePrefix: '',
-  textNodeName: '#text',
-  parseTagValue: false,
-  parseAttributeValue: false,
-  trimValues: true,
-});
-
-const asText = (v) => {
-  if (v == null) return '';
-  if (typeof v === 'object') return v['#text'] != null ? String(v['#text']) : '';
-  return String(v);
+const ENTITIES = {
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
+  mdash: '—', ndash: '–', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“',
+  hellip: '…', copy: '©', reg: '®', trade: '™', middot: '·', bull: '•',
 };
 
-// First value (attribute or element) whose key matches one of `names`, case-insensitive.
-const pick = (obj, names) => {
-  if (!obj || typeof obj !== 'object') return '';
-  const wanted = names.map((n) => n.toLowerCase());
-  for (const [k, v] of Object.entries(obj)) {
-    if (wanted.includes(k.toLowerCase())) {
-      const t = asText(Array.isArray(v) ? v[0] : v);
-      if (t) return t;
+export function decodeEntities(s) {
+  return String(s ?? '').replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => {
+    if (e[0] === '#') {
+      const code = e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return Number.isFinite(code) && code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : m;
     }
-  }
-  return '';
-};
-
-// Depth-first walk over every object node.
-function* walk(node) {
-  if (Array.isArray(node)) {
-    for (const n of node) yield* walk(n);
-  } else if (node && typeof node === 'object') {
-    yield node;
-    for (const v of Object.values(node)) yield* walk(v);
-  }
+    return ENTITIES[e.toLowerCase()] ?? m;
+  });
 }
 
-const hasKey = (obj, re) => Object.keys(obj).some((k) => re.test(k));
+// Text of the first <Tag>…</Tag> (case-insensitive), entities decoded.
+const tagText = (xml, tag) => {
+  const m = xml.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([^<]*)</${tag}>`, 'i'));
+  return m ? decodeEntities(m[1].trim()) : '';
+};
 
-/**
- * Normalises the listings XML into { tokens, ads }.
- *
- * The response schema is not documented in the integration notes, so ads are
- * detected structurally: any node that carries an ImpressionId. Field names
- * are matched case-insensitively with a few common aliases. Verify against a
- * real response (DEBUG_RAW=1) and tighten the alias lists if needed.
- */
+// Index of the ">" that closes the tag opened at `start`, ignoring ">" inside quotes.
+function tagEnd(xml, start) {
+  let quote = false;
+  for (let i = start; i < xml.length; i++) {
+    const c = xml[i];
+    if (c === '"') quote = !quote;
+    else if (c === '>' && !quote) return i;
+  }
+  return -1;
+}
+
+function attrs(openTag) {
+  const out = {};
+  for (const m of openTag.matchAll(/([\w:.-]+)\s*=\s*"([^"]*)"/g)) out[m[1]] = m[2];
+  return out;
+}
+
 export function parseListings(xml) {
-  const root = parser.parse(xml);
-  const nodes = [...walk(root)];
+  const tokens = {
+    searchId: tagText(xml, 'SearchID'),
+    clientId: tagText(xml, 'ClientID'),
+    impressionGuid: tagText(xml, 'ImpressionGUID'),
+    rguid: tagText(xml, 'RGUId'),
+  };
 
-  const tokens = {};
-  for (const [out, names] of Object.entries({
-    searchId: ['SearchID', 'SearchId'],
-    clientId: ['ClientID', 'ClientId'],
-    impressionGuid: ['ImpressionGUID', 'ImpressionGuid'],
-    rguid: ['RGUId', 'RGUID', 'Rguid'],
-  })) {
-    for (const n of nodes) {
-      const v = pick(n, names);
-      if (v) { tokens[out] = v; break; }
-    }
-    tokens[out] ??= '';
+  const ads = [];
+  const re = /<Listing\b/gi;
+  let m;
+  while ((m = re.exec(xml))) {
+    const end = tagEnd(xml, m.index);
+    if (end < 0) break;
+    const a = attrs(xml.slice(m.index, end));
+    const close = xml.slice(end).search(/<\/Listing>/i);
+    const body = close < 0 ? xml.slice(end + 1) : xml.slice(end + 1, end + close);
+    const click = body.match(/<ClickUrl(?:\s[^>]*)?>([^<]*)<\/ClickUrl>/i);
+    if (!a.ImpressionId || !click) continue;
+    ads.push({
+      impressionId: a.ImpressionId,
+      appNs: a.appNs ?? '',
+      k: a.k ?? '',
+      // Passed through untouched: the partner script expects the original value.
+      metadata: a.metadata ?? '',
+      rank: a.rank ?? '',
+      // Kept as the API sends them; the page renders <b> safely and decodes entities.
+      title: a.title ?? '',
+      description: a.description ?? '',
+      host: a.siteHost ?? '',
+      url: decodeEntities(click[1].trim()),
+    });
   }
 
-  const ads = nodes
-    .filter((n) => hasKey(n, /^impressionid$/i))
-    .map((n) => ({
-      impressionId: pick(n, ['ImpressionId']),
-      appNs: pick(n, ['AppNs']),
-      k: pick(n, ['K']),
-      metadata: pick(n, ['Metadata', 'AdMd']),
-      title: pick(n, ['Title', 'Name', 'Headline']),
-      description: pick(n, ['Description', 'Desc', 'Body']),
-      url: pick(n, ['ClickUrl', 'Url', 'Link', 'RedirectUrl']),
-      host: pick(n, ['SiteHost', 'DisplayUrl', 'Host', 'Domain']),
-    }));
+  const suggestions = [];
+  const sug = xml.match(/<Suggestion>([\s\S]*?)<\/Suggestion>/i);
+  if (sug) for (const n of sug[1].matchAll(/<name>([^<]*)<\/name>/gi)) suggestions.push(decodeEntities(n[1].trim()));
 
-  return { tokens, ads };
+  return { tokens, ads, suggestions };
 }

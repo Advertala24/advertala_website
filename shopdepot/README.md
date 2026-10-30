@@ -4,6 +4,7 @@ Dark-theme, mobile-first search lander that shows sponsored listings from the
 MediaWave `listings` XML API.
 
 - `/` – search box
+- `/privacy`, `/contact` – static pages
 - `/results?q=<keywords>[&subid=<id>]` – results page. `subid` is sent to the API as `type`.
 
 ## How it works
@@ -19,11 +20,13 @@ The HTML response then contains:
 3. React renders each ad as `<li data-yiid data-appns data-k data-admd>`;
 4. `mwgpageload.js?v=15` is appended to the bottom of `<body>` after the ads are in the DOM.
 
-Footer links: Privacy Policy, Contact Us, For Advertisers (as supplied by the partner).
+`server/xml.js` is a tolerant extractor, not an XML parser: the API's output is not well-formed (raw `<b>` inside attribute
+values, undefined entities like `&mdash;`). It is tested against a real sample in `server/fixtures/listings.xml`. Ad titles
+and descriptions are rendered with `<b>` support and entity decoding, never as raw HTML. "Related searches" come from the
+response's `Suggestion` names.
 
-> The XML response schema was not in the integration notes. `server/xml.js` finds ads structurally (any node with an
-> `ImpressionId`) and matches field names case-insensitively. Run with `DEBUG_RAW=1` against the real API, then tighten
-> the field names if anything renders empty.
+Pages: `/privacy` and `/contact` are built into the site (contact shows `CONTACT_EMAIL`). The footer links to them, plus the
+partner's *For Advertisers* PDF; the privacy page links to the partner's privacy policy.
 
 ## Run
 

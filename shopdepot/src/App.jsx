@@ -1,9 +1,13 @@
-const LOGO = 'https://s3-us-west-2.amazonaws.com/mediawavegroup.org/shopdepot.png';
+import RichText from './RichText.jsx';
+import { Privacy, Contact } from './Legal.jsx';
+
+const LOGO = '/shopdepot.png';
 const LINKS = [
-  ['Privacy Policy', 'https://mediawavegroup.org/privacy-policy.html'],
-  ['Contact Us', 'https://quickshoppers.co/mbd/contact'],
+  ['Privacy Policy', '/privacy'],
+  ['Contact Us', '/contact'],
   ['For Advertisers', 'https://s3-us-west-2.amazonaws.com/mediawavegroup.org/ForAdvertisers.pdf'],
 ];
+const isExternal = (href) => href.startsWith('http');
 
 function SearchForm({ q = '', subid }) {
   return (
@@ -25,9 +29,9 @@ function Ad({ ad }) {
       data-admd={ad.metadata}
     >
       <span className="sponsored">Sponsored</span>
-      <a className="ad-title" href={ad.url} target="_blank" rel="noopener sponsored">{ad.title}</a>
+      <a className="ad-title" href={ad.url} target="_blank" rel="noopener sponsored"><RichText text={ad.title} /></a>
       {ad.host ? <span className="ad-host">{ad.host}</span> : null}
-      <p className="ad-desc">{ad.description}</p>
+      <p className="ad-desc"><RichText text={ad.description} /></p>
     </li>
   );
 }
@@ -50,7 +54,23 @@ export default function App({ data }) {
                 {data.error ? 'Results are unavailable right now. Please try again.' : `No results for “${data.q}”.`}
               </p>
             )}
+            {data.suggestions?.length > 0 && (
+              <section className="related">
+                <h2>Related searches</h2>
+                <ul>
+                  {data.suggestions.map((s) => (
+                    <li key={s}>
+                      <a href={`/results?q=${encodeURIComponent(s)}${data.subid ? `&subid=${encodeURIComponent(data.subid)}` : ''}`}>{s}</a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </>
+        ) : data.page === 'privacy' ? (
+          <Privacy email={data.email} />
+        ) : data.page === 'contact' ? (
+          <Contact email={data.email} />
         ) : (
           <section className="hero">
             <h1>Find great deals, fast.</h1>
@@ -61,7 +81,7 @@ export default function App({ data }) {
       <footer className="foot">
         <nav>
           {LINKS.map(([label, href]) => (
-            <a key={href} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+            <a key={href} href={href} {...(isExternal(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{label}</a>
           ))}
         </nav>
       </footer>
