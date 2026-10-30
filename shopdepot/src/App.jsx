@@ -12,7 +12,7 @@ const isExternal = (href) => href.startsWith('http');
 function SearchForm({ q = '', subid }) {
   return (
     <form className="search" action="/results" method="get" role="search">
-      <input name="q" defaultValue={q} placeholder="Search deals, products, services…" aria-label="Search" required />
+      <input name="q" type="search" defaultValue={q} placeholder="Search deals and products…" aria-label="Search" enterKeyHint="search" autoComplete="off" autoCapitalize="none" required />
       {subid ? <input type="hidden" name="subid" value={subid} /> : null}
       <button type="submit">Search</button>
     </form>
@@ -41,7 +41,9 @@ export default function App({ data }) {
   return (
     <>
       <header className="top">
-        <a href="/"><img className="logo" src={LOGO} alt="ShopDepot" /></a>
+        <div className="wrap">
+          <a href="/"><img className="logo" src={LOGO} alt="ShopDepot" /></a>
+        </div>
       </header>
       <main>
         {results ? (
