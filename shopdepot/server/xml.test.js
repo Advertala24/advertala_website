@@ -41,3 +41,29 @@ test('beacon escapes values', () => {
   const html = beaconHtml({ searchId: "a'b</script>", clientId: '', impressionGuid: '', rguid: '' }, 'tag');
   assert.ok(!html.includes("a'b</script>"));
 });
+
+// Second real sample: well-formed XML with one- and two-level escaping and SiteLinks that nest <Url><Url>.
+const subaru = fs.readFileSync(new URL('./fixtures/listings-subaru.xml', import.meta.url), 'utf8');
+
+test('subaru sample: tokens and three ads, click url is the listing ClickUrl (not a sitelink)', () => {
+  const { tokens, ads } = parseListings(subaru);
+  assert.equal(tokens.searchId, '6S7KK51LEGG29');
+  assert.equal(tokens.clientId, '0F952848A93842BC99B1771B0E4CEED9');
+  assert.equal(tokens.impressionGuid, '645049C673A44BDA8E4993E2C5DB82AE');
+  assert.equal(tokens.rguid, '3dda375eceee43e7b4683faad22d5e0a');
+  assert.deepEqual(ads.map((a) => a.k), ['5036', '5049', '5061']);
+  assert.deepEqual(ads.map((a) => a.url.split('/rdclk/')[1].split('/')[0]), ['MAIN1', 'MAIN2', 'MAIN3']);
+});
+
+test('subaru sample: escaped <b> becomes real tags; double escapes collapse', () => {
+  const { ads } = parseListings(subaru);
+  assert.equal(ads[0].description, 'Schedule a Test Drive in a New <b>Subaru</b> Today. Shop Our Fantastic Selection of Offers at West Houston <b>Subaru</b> Today');
+  assert.equal(ads[1].title, '2026 MAZDA CX-30 - Explore Features & Options');
+  assert.equal(ads[2].title, 'Shop <b>Subaru</b> At CarMax® - Find The Right <b>Subaru</b> For You');
+  assert.equal(ads[2].host, 'www.carmax.com/Subarus');
+});
+
+test('markdown-mangled siteHost is unwrapped', () => {
+  const x = '<Listing ImpressionId="1" siteHost="[www.a.com/x](https://www.a.com/x)" title="t" description="d"><ClickUrl>https://c</ClickUrl></Listing>';
+  assert.equal(parseListings(x).ads[0].host, 'www.a.com/x');
+});

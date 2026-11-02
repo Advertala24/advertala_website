@@ -23,6 +23,21 @@ export function decodeEntities(s) {
   });
 }
 
+// The feed escapes inconsistently: "&lt;b>" (one level) and "&amp;amp;" / "&amp;reg;" (two levels)
+// both occur. Decode until stable (bounded) so every variant ends up as plain text with real <b> tags.
+export function decodeDeep(s) {
+  let out = String(s ?? '');
+  for (let i = 0; i < 3; i++) {
+    const next = decodeEntities(out);
+    if (next === out) break;
+    out = next;
+  }
+  return out;
+}
+
+// A host pasted through a markdown renderer looks like "[example.com](https://example.com)".
+const unmarkdown = (s) => s.replace(/^\[([^\]]+)\]\([^)]*\)$/, '$1');
+
 // Text of the first <Tag>…</Tag> (case-insensitive), entities decoded.
 const tagText = (xml, tag) => {
   const m = xml.match(new RegExp(`<${tag}(?:\\s[^>]*)?>([^<]*)</${tag}>`, 'i'));
@@ -72,10 +87,10 @@ export function parseListings(xml) {
       // Passed through untouched: the partner script expects the original value.
       metadata: a.metadata ?? '',
       rank: a.rank ?? '',
-      // Kept as the API sends them; the page renders <b> safely and decodes entities.
-      title: a.title ?? '',
-      description: a.description ?? '',
-      host: a.siteHost ?? '',
+      // Plain text that may contain <b>…</b>; the page renders that safely.
+      title: decodeDeep(a.title),
+      description: decodeDeep(a.description),
+      host: unmarkdown(decodeDeep(a.siteHost)),
       url: decodeEntities(click[1].trim()),
     });
   }
