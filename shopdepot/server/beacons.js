@@ -20,7 +20,7 @@ export function beaconHtml(tokens, sourceTag) {
     selectTier('init',{source_tag:'${jsStr(sourceTag)}',ysid:'${jsStr(searchId)}',cid:'${jsStr(clientId)}',ig:'${jsStr(impressionGuid)}',
         select_tier:{clarityId:'syd2j7szox',rguid:'${jsStr(rguid)}'},test_mode:false});
 </script>
-<img height="1" width="1" alt="" src="https://search.yahoo.com/beacon/geop/p?s=1197774733&amp;ysid=${encodeURIComponent(searchId)}&amp;traffic_source=${src}"/>`;
+<img height="1" width="1" alt="" style="position:absolute" src="https://search.yahoo.com/beacon/geop/p?s=1197774733&amp;ysid=${encodeURIComponent(searchId)}&amp;traffic_source=${src}"/>`;
 }
 
 // Safe for embedding JSON inside an inline <script>.

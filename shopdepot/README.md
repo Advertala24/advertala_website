@@ -4,7 +4,6 @@ Dark-theme, mobile-first search lander that shows sponsored listings from the
 MediaWave `listings` XML API.
 
 - `/` – search box
-- `/privacy`, `/contact` – static pages
 - `/results?q=<keywords>[&subid=<id>]` – results page. `subid` is sent to the API as `type`.
 
 ## How it works
@@ -22,11 +21,16 @@ The HTML response then contains:
 
 `server/xml.js` is a tolerant extractor, not an XML parser: the API's output is not well-formed (raw `<b>` inside attribute
 values, undefined entities like `&mdash;`). It is tested against a real sample in `server/fixtures/listings.xml`. Ad titles
-and descriptions are rendered with `<b>` support and entity decoding, never as raw HTML. "Related searches" come from the
-response's `Suggestion` names.
+and descriptions are rendered with `<b>` support and entity decoding, never as raw HTML.
 
-Pages: `/privacy` and `/contact` are built into the site (contact shows `CONTACT_EMAIL`). The footer links to them, plus the
-partner's *For Advertisers* PDF; the privacy page links to the partner's privacy policy.
+## Design
+
+Modelled on the partner's reference lander (dark theme, which has the best CTR on mobile): white header with a centred
+logo, dark body fading to purple, a "Sponsored results for: …" label, and **only sponsored ads** (no search box or related
+searches on the results page). Each ad mirrors the reference markup (`li.yahoo > section.listingsection` with title, host,
+description and a full-width **SEE IT** button, all linking to the ad's click URL) and carries `data-yiid`, `data-appns`,
+`data-k`, `data-admd` and `data-bingads-suffix`. Fonts: Red Hat Display for titles. The footer uses the partner's three
+required external links (Privacy Policy, Contact Us, For Advertisers); there are no in-site legal pages.
 
 ## Run
 
@@ -42,7 +46,7 @@ Docker: `docker compose up --build` (reads `.env`, serves :3000), or `npm run do
 | --- | --- |
 | `npm run dev` / `dev:mock` | Build and run locally, with the real API or the saved sample |
 | `npm test` | Parser and beacon unit tests |
-| `npm run smoke -- <base-url> ["query"]` | Checks a running lander: beacon first and filled in, ads present, pages return 200. Run it against the deployed URL before sending it to the partner |
+| `npm run smoke -- <base-url> ["query"]` | Checks a running lander: beacon first and filled in, ads present, home and health endpoints return 200. Run it against the deployed URL before sending it to the partner |
 | `npm run listings -- "family vacations" [client_ip]` | Raw listings XML via curl |
 | `npm run report -- [start] [end]` | Earnings report JSON via curl (default: yesterday) |
 | `npm run mock` | Fake listings API on :4999 |

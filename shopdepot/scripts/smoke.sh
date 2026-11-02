@@ -24,7 +24,7 @@ beacon_line=$(grep -n "selectTier('init'" <<<"$HTML" | head -1 | cut -d: -f1)
 if [ -n "$first_script" ] && [ -n "$beacon_line" ] && [ "$beacon_line" -le $((first_script + 6)) ]; then ok "beacon is the first script"; else bad "beacon is the first script"; fi
 check "ads in page data"                 grep -q '"impressionId":"' <<<"$HTML"
 check "page loads app bundle"            grep -q '/assets/index-' <<<"$HTML"
-for p in / /privacy /contact; do
+for p in /; do
   code=$(curl -s -o /dev/null -w '%{http_code}' -m 20 "$BASE$p"); [ "$code" = 200 ] && ok "GET $p -> 200" || bad "GET $p -> $code"
 done
 code=$(curl -s -o /dev/null -w '%{http_code}' -m 20 "$BASE/healthz"); [ "$code" = 200 ] && ok "healthz" || bad "healthz -> $code"
