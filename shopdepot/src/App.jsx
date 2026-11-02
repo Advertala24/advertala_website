@@ -8,6 +8,14 @@ const LINKS = [
   ['For Advertisers', 'https://s3-us-west-2.amazonaws.com/mediawavegroup.org/ForAdvertisers.pdf'],
 ];
 
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+      <path fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zm5.5-2 5 5" />
+    </svg>
+  );
+}
+
 function ArrowIcon() {
   return (
     <svg className="barrow" viewBox="0 0 512 512" width="22" height="22" aria-hidden="true">
@@ -39,6 +47,13 @@ function Ad({ ad }) {
           </a>
         ) : null}
         <a {...link} className="jlisting desc"><p className="yahoo"><RichText text={ad.description} /></p></a>
+        {ad.siteLinks?.length > 0 && (
+          <div className="siteLinks">
+            {ad.siteLinks.map((l) => (
+              <a key={l.url + l.text} href={l.url} rel="nofollow" className="slinks jlisting">{l.text}</a>
+            ))}
+          </div>
+        )}
         <a {...link} className="jlisting bigsee">
           <span>SEE IT</span>
           <ArrowIcon />
@@ -48,17 +63,53 @@ function Ad({ ad }) {
   );
 }
 
+const resultsUrl = (q, subid) => `/results?q=${encodeURIComponent(q)}${subid ? `&subid=${encodeURIComponent(subid)}` : ''}`;
+
+// Right column (desktop only): search again + related searches. Both reload /results with a new q.
+function Sidebar({ data }) {
+  return (
+    <aside id="rside">
+      <div className="widget widget_search">
+        <h5 className="widget-title">Search</h5>
+        <form action="/results" method="get" role="search">
+          <div className="axil-search">
+            <button type="submit" className="search-button" aria-label="Search"><SearchIcon /></button>
+            <input
+              type="search" name="q" className="form-control" placeholder="Search" defaultValue={data.q}
+              aria-label="Search" enterKeyHint="search" autoComplete="off" autoCapitalize="none" required
+            />
+            {data.subid ? <input type="hidden" name="subid" value={data.subid} /> : null}
+          </div>
+        </form>
+      </div>
+      {data.suggestions?.length > 0 && (
+        <div className="widget widget_postlist">
+          <h5 className="widget-title">Related Searches</h5>
+          <ul className="sub-menu">
+            {data.suggestions.map((s) => (
+              <li key={s}><a href={resultsUrl(s, data.subid)}>{s}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </aside>
+  );
+}
+
 function Results({ data }) {
   return (
-    <div className="serp">
-      <label>Sponsored results for: <b>{data.q}</b></label>
-      {data.ads.length > 0 ? (
-        <ul className="ads tops">{data.ads.map((ad, i) => <Ad key={ad.impressionId || i} ad={ad} />)}</ul>
-      ) : (
-        <p className="empty">
-          {data.error ? 'Results are unavailable right now. Please try again.' : `No sponsored results for “${data.q}”.`}
-        </p>
-      )}
+    <div className="layout">
+      <div className="serp">
+        <label>Sponsored results for: <b>{data.q}</b></label>
+        {data.ads.length > 0 ? (
+          <ul className="ads tops">{data.ads.map((ad, i) => <Ad key={ad.impressionId || i} ad={ad} />)}</ul>
+        ) : (
+          <p className="empty">
+            {data.error ? 'Results are unavailable right now. Please try again.' : `No sponsored results for “${data.q}”.`}
+          </p>
+        )}
+      </div>
+      <Sidebar data={data} />
     </div>
   );
 }
@@ -82,16 +133,28 @@ export default function App({ data }) {
   return (
     <>
       <header className="top">
-        <a href="/"><img className="logo" src={LOGO} alt="ShopDepot" /></a>
+        <div className="top-inner">
+          <a href="/"><img className="logo" src={LOGO} alt="ShopDepot" /></a>
+          <nav className="topnav">
+            <a href="/">Home</a>
+            <a href={LINKS[1][1]} target="_blank" rel="noopener noreferrer">Contact Us</a>
+          </nav>
+        </div>
       </header>
       <div id="mainsection">
         <main>{data.page === 'results' ? <Results data={data} /> : <Home />}</main>
         <footer className="foot">
-          <nav>
-            {LINKS.map(([label, href]) => (
-              <a key={href} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
-            ))}
-          </nav>
+          <div className="foot-inner">
+            <div className="foot-left">
+              <img className="foot-logo" src={LOGO} alt="" />
+              <nav>
+                {LINKS.map(([label, href]) => (
+                  <a key={href} href={href} target="_blank" rel="noopener noreferrer">{label}</a>
+                ))}
+              </nav>
+            </div>
+            <p className="rights">All Rights Reserved © {new Date().getFullYear()}</p>
+          </div>
         </footer>
       </div>
     </>

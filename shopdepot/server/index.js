@@ -75,7 +75,7 @@ app.get('/results', async (req, res) => {
   if (!q) return res.redirect(302, '/');
   if (!cfg.key) return res.status(500).send('MWG_KEY is not configured');
 
-  let result = { tokens: {}, ads: [] };
+  let result = { tokens: {}, ads: [], suggestions: [] };
   let error = false;
   try {
     result = await fetchListings(req, q, subid);
@@ -85,7 +85,7 @@ app.get('/results', async (req, res) => {
   }
   // Beacons go at the very top of <head>, before any other script.
   const head = result.tokens.searchId ? beaconHtml(result.tokens, cfg.sourceTag) : '';
-  render(res, { head, data: { page: 'results', q, subid, ads: result.ads, error } });
+  render(res, { head, data: { page: 'results', q, subid, ads: result.ads, suggestions: result.suggestions, error } });
 });
 
 app.get('*', (_req, res) => res.redirect(302, '/'));

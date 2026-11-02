@@ -80,7 +80,14 @@ export function parseListings(xml) {
     const body = close < 0 ? xml.slice(end + 1) : xml.slice(end + 1, end + close);
     const click = body.match(/<ClickUrl(?:\s[^>]*)?>([^<]*)<\/ClickUrl>/i);
     if (!a.ImpressionId || !click) continue;
+    const siteLinks = [];
+    for (const sl of body.matchAll(/<SiteLink>([\s\S]*?)<\/SiteLink>/gi)) {
+      const text = sl[1].match(/<Text>([^<]*)<\/Text>/i);
+      const url = sl[1].match(/<Url>\s*(?:<Url>)?\s*(https?:[^<\s]+)/i);
+      if (text && url) siteLinks.push({ text: decodeDeep(text[1].trim()), url: decodeEntities(url[1]) });
+    }
     ads.push({
+      siteLinks,
       impressionId: a.ImpressionId,
       appNs: a.appNs ?? '',
       k: a.k ?? '',

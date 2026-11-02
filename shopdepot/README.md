@@ -25,12 +25,19 @@ and descriptions are rendered with `<b>` support and entity decoding, never as r
 
 ## Design
 
-Modelled on the partner's reference lander (dark theme, which has the best CTR on mobile): white header with a centred
-logo, dark body fading to purple, a "Sponsored results for: …" label, and **only sponsored ads** (no search box or related
-searches on the results page). Each ad mirrors the reference markup (`li.yahoo > section.listingsection` with title, host,
-description and a full-width **SEE IT** button, all linking to the ad's click URL) and carries `data-yiid`, `data-appns`,
-`data-k`, `data-admd` and `data-bingads-suffix`. Fonts: Red Hat Display for titles. The footer uses the partner's three
-required external links (Privacy Policy, Contact Us, For Advertisers); there are no in-site legal pages.
+Follows the partner's reference lander, which switches theme at 1000px:
+
+- **Mobile (≤1000px) – dark theme** (best CTR): white header with a centred logo, dark body fading to purple, a
+  "Sponsored results for: …" label, and ads as plain text blocks with a full-width teal **SEE IT** button. No sidebar,
+  no sitelinks.
+- **Desktop (>1000px) – light theme**: header with logo + Home / Contact Us, two columns. Left: ad cards (mauve title,
+  teal-grey host, black description, sitelink buttons). Right sidebar: **Search** (submits to `/results`, reloading the page
+  with the new `q` and updated URL) and **Related Searches** (links to `/results?q=<suggestion>`), both keeping `subid`.
+  Footer with logo, the partner links and "All Rights Reserved © year".
+
+Each ad mirrors the reference markup (`li.yahoo > section.listingsection`) and carries `data-yiid`, `data-appns`,
+`data-k`, `data-admd` and `data-bingads-suffix`. Title, host, description and button all link to the ad's click URL;
+sitelinks use their own URLs. Fonts: Red Hat Display. Footer links are the partner's three required external links.
 
 ## Run
 

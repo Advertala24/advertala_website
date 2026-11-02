@@ -67,3 +67,11 @@ test('markdown-mangled siteHost is unwrapped', () => {
   const x = '<Listing ImpressionId="1" siteHost="[www.a.com/x](https://www.a.com/x)" title="t" description="d"><ClickUrl>https://c</ClickUrl></Listing>';
   assert.equal(parseListings(x).ads[0].host, 'www.a.com/x');
 });
+
+test('subaru sample: sitelinks parsed per ad (desktop only UI)', () => {
+  const { ads } = parseListings(subaru);
+  assert.deepEqual(ads[0].siteLinks.map((l) => l.text), ['Schedule Service', 'About West Houston Subaru']);
+  assert.equal(ads[0].siteLinks[0].url, 'https://rd.search.yahoo.com/rdclk/SITELINK1/RK=0/RS=s1-');
+  assert.equal(ads[1].siteLinks.length, 1);
+  assert.equal(ads[2].siteLinks.length, 0);
+});
