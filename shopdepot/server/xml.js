@@ -104,7 +104,7 @@ export function parseListings(xml) {
 
   const suggestions = [];
   const sug = xml.match(/<Suggestion>([\s\S]*?)<\/Suggestion>/i);
-  if (sug) for (const n of sug[1].matchAll(/<name>([^<]*)<\/name>/gi)) suggestions.push(decodeEntities(n[1].trim()));
+  if (sug) for (const n of sug[1].matchAll(/<name>([^<]*)<\/name>/gi)) { const t = decodeEntities(n[1].trim()); if (t) suggestions.push(t); }
 
   return { tokens, ads, suggestions };
 }

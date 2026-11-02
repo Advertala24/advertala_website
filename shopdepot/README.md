@@ -30,9 +30,9 @@ Follows the partner's reference lander, which switches theme at 1000px:
 - **Mobile (≤1000px) – dark theme** (best CTR): white header with a centred logo, dark body fading to purple, a
   "Sponsored results for: …" label, and ads as plain text blocks with a full-width teal **SEE IT** button. No sidebar,
   no sitelinks.
-- **Desktop (>1000px) – light theme**: header with logo + Home / Contact Us, two columns. Left: ad cards (mauve title,
+- **Desktop (>1000px) – light theme**: header with the logo on the left, **Home** and **Contact Us** in the middle (plain external links: Home goes to `ROOT_URL`, Contact Us to the partner's contact page) and a search box on the right; then two columns. Left: ad cards (mauve title,
   teal-grey host, black description, sitelink buttons). Right sidebar: **Search** (submits to `/results`, reloading the page
-  with the new `q` and updated URL) and **Related Searches** (links to `/results?q=<suggestion>`), both keeping `subid`.
+  with the new `q` and updated URL) and **Related Searches** (links to `/results?q=<suggestion>`), both keeping `subid`. Related Searches comes from the response's `Suggestion` names; when there are none, the whole box is omitted. The header search does the same as the sidebar one.
   Footer with logo, the partner links and "All Rights Reserved © year".
 
 Each ad mirrors the reference markup (`li.yahoo > section.listingsection`) and carries `data-yiid`, `data-appns`,

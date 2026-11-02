@@ -14,6 +14,7 @@ const cfg = {
   numAds: Number(process.env.NUM_ADS || 3),
   serveUrl: process.env.SERVE_URL || 'https://marketplace.shopdepot.us/results',
   sourceTag: process.env.SOURCE_TAG || 'mediawave_n2s_xmlb_11649_fb_shopdepot',
+  rootUrl: process.env.ROOT_URL || 'https://shopdepot.us/',
   port: Number(process.env.PORT || 3000),
   debugRaw: process.env.DEBUG_RAW === '1',
 };
@@ -67,7 +68,7 @@ app.use('/assets', express.static(path.join(DIST, 'assets'), { immutable: true, 
 
 app.use(express.static(DIST, { index: false, maxAge: '1d' }));
 
-app.get('/', (_req, res) => render(res, { data: { page: 'home' } }));
+app.get('/', (_req, res) => render(res, { data: { page: 'home', rootUrl: cfg.rootUrl } }));
 
 app.get('/results', async (req, res) => {
   const q = String(req.query.q || '').trim().slice(0, 200);
@@ -85,7 +86,7 @@ app.get('/results', async (req, res) => {
   }
   // Beacons go at the very top of <head>, before any other script.
   const head = result.tokens.searchId ? beaconHtml(result.tokens, cfg.sourceTag) : '';
-  render(res, { head, data: { page: 'results', q, subid, ads: result.ads, suggestions: result.suggestions, error } });
+  render(res, { head, data: { page: 'results', rootUrl: cfg.rootUrl, q, subid, ads: result.ads, suggestions: result.suggestions, error } });
 });
 
 app.get('*', (_req, res) => res.redirect(302, '/'));

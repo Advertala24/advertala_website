@@ -75,3 +75,9 @@ test('subaru sample: sitelinks parsed per ad (desktop only UI)', () => {
   assert.equal(ads[1].siteLinks.length, 1);
   assert.equal(ads[2].siteLinks.length, 0);
 });
+
+test('no suggestions in the response -> empty list (UI hides the box)', () => {
+  const x = '<Results><ResultSet><Listing ImpressionId="1" title="t" description="d"><ClickUrl>https://c</ClickUrl></Listing></ResultSet></Results>';
+  assert.deepEqual(parseListings(x).suggestions, []);
+  assert.deepEqual(parseListings('<Suggestion><name> </name></Suggestion>').suggestions, []);
+});

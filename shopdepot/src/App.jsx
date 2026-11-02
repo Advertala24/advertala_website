@@ -65,22 +65,29 @@ function Ad({ ad }) {
 
 const resultsUrl = (q, subid) => `/results?q=${encodeURIComponent(q)}${subid ? `&subid=${encodeURIComponent(subid)}` : ''}`;
 
+// Small pill search used in the header and the sidebar; submitting reloads /results with a new q.
+function SearchBox({ q = '', subid, id }) {
+  return (
+    <form action="/results" method="get" role="search">
+      <div className="axil-search">
+        <button type="submit" className="search-button" aria-label="Search"><SearchIcon /></button>
+        <input
+          type="search" name="q" id={id} className="form-control" placeholder="Search" defaultValue={q}
+          aria-label="Search" enterKeyHint="search" autoComplete="off" autoCapitalize="none" required
+        />
+        {subid ? <input type="hidden" name="subid" value={subid} /> : null}
+      </div>
+    </form>
+  );
+}
+
 // Right column (desktop only): search again + related searches. Both reload /results with a new q.
 function Sidebar({ data }) {
   return (
     <aside id="rside">
       <div className="widget widget_search">
         <h5 className="widget-title">Search</h5>
-        <form action="/results" method="get" role="search">
-          <div className="axil-search">
-            <button type="submit" className="search-button" aria-label="Search"><SearchIcon /></button>
-            <input
-              type="search" name="q" className="form-control" placeholder="Search" defaultValue={data.q}
-              aria-label="Search" enterKeyHint="search" autoComplete="off" autoCapitalize="none" required
-            />
-            {data.subid ? <input type="hidden" name="subid" value={data.subid} /> : null}
-          </div>
-        </form>
+        <SearchBox q={data.q} subid={data.subid} />
       </div>
       {data.suggestions?.length > 0 && (
         <div className="widget widget_postlist">
@@ -134,11 +141,14 @@ export default function App({ data }) {
     <>
       <header className="top">
         <div className="top-inner">
-          <a href="/"><img className="logo" src={LOGO} alt="ShopDepot" /></a>
+          <a className="top-logo" href="/"><img className="logo" src={LOGO} alt="ShopDepot" /></a>
           <nav className="topnav">
-            <a href="/">Home</a>
+            <a href={data.rootUrl || '/'}>Home</a>
             <a href={LINKS[1][1]} target="_blank" rel="noopener noreferrer">Contact Us</a>
           </nav>
+          <div className="header-search">
+            <SearchBox q={data.q} subid={data.subid} />
+          </div>
         </div>
       </header>
       <div id="mainsection">

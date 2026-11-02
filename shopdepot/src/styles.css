@@ -13,7 +13,7 @@ a { color: inherit; }
 /* White header with the logo centred, as on the reference lander */
 .top { background: #fff; padding: 10px 16px; }
 .top-inner { display: flex; align-items: center; justify-content: center; }
-.topnav { display: none; }
+.topnav, .header-search { display: none; }
 .logo { height: 56px; width: auto; display: inline-block; vertical-align: middle; }
 
 /* Dark body: solid → purple gradient toward the bottom */
@@ -77,9 +77,12 @@ main { flex: 1; width: 100%; max-width: 720px; margin: 0 auto; padding: 16px max
   body { background: #fff; color: #000; }
 
   .top { padding: 0 30px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); position: relative; z-index: 2; }
-  .top-inner { max-width: 1200px; margin: 0 auto; justify-content: space-between; padding: 12px 0; }
+  .top-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 12px 0; }
+  .top-logo { justify-self: start; }
+  .header-search { display: block; justify-self: end; }
+  .header-search .axil-search { width: 245px; }
   .logo { height: 46px; }
-  .topnav { display: flex; gap: 28px; }
+  .topnav { display: flex; gap: 32px; justify-content: center; }
   .topnav a { color: #000; text-decoration: none; font: 500 16px var(--display); }
   .topnav a:hover { color: var(--primary); }
 
