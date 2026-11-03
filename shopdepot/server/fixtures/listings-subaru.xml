@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://dtd.overture.com/schema/affiliate/2.9.3/OvertureSearchResults.xsd">
+    <KeywordsRatingSet keywords="2024 subaru forester">
+        <Market>us</Market>
+    </KeywordsRatingSet>
+    <TraceId>6ae840494fdc4a95922af5e3dd4503c0</TraceId>
+    <ClientID>0F952848A93842BC99B1771B0E4CEED9</ClientID>
+    <RGUId>3dda375eceee43e7b4683faad22d5e0a</RGUId>
+    <NextArgs>Keywords=2024+subaru+forester&amp;xargs=AAA&amp;hData=BBB</NextArgs>
+    <SearchID>6S7KK51LEGG29</SearchID>
+    <ImpressionGUID>645049C673A44BDA8E4993E2C5DB82AE</ImpressionGUID>
+    <MoreSponsoredResult>
+        <Suggestion>
+            <name>2024 subaru forester problems complaints</name>
+            <name>2024 subaru outback</name>
+        </Suggestion>
+    </MoreSponsoredResult>
+    <ResultSet id="searchResults" numResults="3" searchId="6S7KK51LEGG29" plaCount="0" adultRating="G">
+        <NextArgs>Keywords=2024+subaru+forester&amp;xargs=AAA&amp;hData=BBB</NextArgs>
+        <Listing appNs="API" k="5036" metadata="e30%3D" rank="1" siteHost="www.westhoustonsubaru.com" biddedListing="true" adultRating="G" ImpressionId="79577375360227" title="Shop All of Our Offers Today - Serving Sugar Land" description="Schedule a Test Drive in a New &lt;b>Subaru&lt;/b> Today. Shop Our Fantastic Selection of Offers at West Houston &lt;b>Subaru&lt;/b> Today">
+            <Extensions>
+                <calloutExtension>
+                    <phrases>
+                        <phrase>Shop Inventory Online · Schedule Service · Schedule A Service · Order Parts</phrase>
+                    </phrases>
+                </calloutExtension>
+                <SiteLinks>
+                    <SiteLink>
+                        <Text>Schedule Service</Text>
+                        <Url>
+                            <Url>https://rd.search.yahoo.com/rdclk/SITELINK1/RK=0/RS=s1-</Url>
+                        </Url>
+                    </SiteLink>
+                    <SiteLink>
+                        <Text>About West Houston Subaru</Text>
+                        <Url>
+                            <Url>https://rd.search.yahoo.com/rdclk/SITELINK2/RK=0/RS=s2-</Url>
+                        </Url>
+                    </SiteLink>
+                </SiteLinks>
+                <SiteLinkLayoutSuggest>1:1,2</SiteLinkLayoutSuggest>
+            </Extensions>
+            <ClickUrl type="body">https://rd.search.yahoo.com/rdclk/MAIN1/RK=0/RS=m1-</ClickUrl>
+        </Listing>
+        <Listing appNs="API" k="5049" metadata="e30%3D" rank="2" siteHost="www.mazdausa.com" biddedListing="true" adultRating="G" ImpressionId="77034726824817" title="2026 MAZDA CX-30 - Explore Features &amp;amp; Options" description="Finding your Perfect Mazda has Never been Easier. Unique Offers and Financing Available. Learn More About CX-30 Financing &amp;amp; Special Offers. Explore Options Now.">
+            <Extensions>
+                <SiteLinks>
+                    <SiteLink>
+                        <Text>Sense of Security</Text>
+                        <Url>
+                            <Url>https://rd.search.yahoo.com/rdclk/SITELINK3/RK=0/RS=s3-</Url>
+                        </Url>
+                    </SiteLink>
+                </SiteLinks>
+                <SiteLinkLayoutSuggest>1:1</SiteLinkLayoutSuggest>
+            </Extensions>
+            <ClickUrl type="body">https://rd.search.yahoo.com/rdclk/MAIN2/RK=0/RS=m2-</ClickUrl>
+        </Listing>
+        <Listing appNs="API" k="5061" metadata="e30%3D" rank="3" siteHost="www.carmax.com/Subarus" biddedListing="true" adultRating="G" ImpressionId="79096325854573" title="Shop &lt;b>Subaru&lt;/b> At CarMax&amp;reg; - Find The Right &lt;b>Subaru&lt;/b> For You" description="Express Pickup from select stores. Restrictions Apply. See carmax.com. Searching is even easier when you pre-qualify at CarMax&amp;reg;.">
+            <ClickUrl type="body">https://rd.search.yahoo.com/rdclk/MAIN3/RK=0/RS=m3-</ClickUrl>
+        </Listing>
+    </ResultSet>
+</Results>

@@ -1,0 +1,40 @@
+<Results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://dtd.overture.com/schema/affiliate/2.9.3/OvertureSearchResults.xsd">
+<KeywordsRatingSet keywords="family vacations">
+<Market>us</Market>
+</KeywordsRatingSet>
+<TraceId>6ae4314da20443978f88b1f85abba32c</TraceId>
+<ClientID>59D18DCA6ABC445F9480467F5F851E39</ClientID>
+<RGUId>63d4b0dfa07b407ea7cce662d9b1278b</RGUId>
+<NextArgs>Keywords=family+vacations&xargs=12KPjg1oZpy5a3vOHvKvjFT_XBhg9O0JCw5Is_WMQaRp8L_XF7EbEoO92ExpctD-Fmzz7g&hData=12KPjg1oFsxJy7tuqnNO2KCL3XgEsP4NTs58loc8gnSqwp8GduJaktK_CazoFyJI8OkHu47MKk</NextArgs>
+<SearchID>0F98BDDLE8CAD</SearchID>
+<ImpressionGUID>645031F049B44D6B8C0B385379346326</ImpressionGUID>
+<MoreSponsoredResult>
+<Suggestion>
+<name>vacations</name>
+<name>family cruises</name>
+<name>vacation package</name>
+<name>travel deals</name>
+<name>family travel</name>
+<name>cruise vacation</name>
+</Suggestion>
+</MoreSponsoredResult>
+<ResultSet id="searchResults" numResults="3" searchId="0F98BDDLE8CAD" plaCount="0" adultRating="G">
+<NextArgs>Keywords=family+vacations</NextArgs>
+<Listing appNs="API" k="5036" metadata="e30%3D" rank="1" siteHost="www.arkansas.com/arkansas-fall/fall-foliage" biddedListing="true" adultRating="G" ImpressionId="79233779635660" title="Plan a Fall Trip to Arkansas - Plan Your Arkansas Road Trip" description="Come see the leaves change in the Arkansas Ozarks. Take an outdoor getaway this fall. The time is right for outdoor adventure. Arkansas is beautiful, affordable and close.">
+<ClickUrl type="body">https://rd.search.yahoo.com/rdclk/AAA/RU=https%3a%2f%2fwww.bing.com%2faclick%3fld%3dONE%26rlid%3d1/RK=0/RS=aaa-</ClickUrl>
+</Listing>
+<Listing appNs="API" k="5039" metadata="e30%3D" rank="2" siteHost="www.gulfshores.com" biddedListing="true" adultRating="G" ImpressionId="74079927916174" title="Kid-Friendly Destinations - Best <b>Vacations</b> for Kids" description="Bring the whole <b>family</b>&mdash;there&rsquo;s plenty of sand, surf, and seafood to go around. Discover pristine shores and exciting adventures for all ages on Alabama's Beaches.">
+<Extensions>
+<calloutExtension>
+<phrases>
+<phrase>Hiking & Trails · Bicycle Rentals · Dolphin Cruises · Diving & Snorkeling</phrase>
+</phrases>
+</calloutExtension>
+</Extensions>
+<ClickUrl type="body">https://rd.search.yahoo.com/rdclk/BBB/RU=https%3a%2f%2fwww.bing.com%2faclick%3fld%3dTWO%26rlid%3d2/RK=0/RS=bbb-</ClickUrl>
+</Listing>
+<Listing appNs="API" k="5043" metadata="e30%3D" rank="3" siteHost="www.cruisecritic.com" biddedListing="true" adultRating="G" ImpressionId="79233752539267" title="Top 10 <b>Family</b> Cruises - Today's Top 25 Cruise Deals" description="Complete guide to cruises, cruise lines and exclusive cruise deals for your <b>family</b> cruise. Cruise Critic makes it simple to research &amp; compare deals for <b>family</b> cruises.">
+<ClickUrl type="body">https://rd.search.yahoo.com/rdclk/CCC/RU=https%3a%2f%2fwww.bing.com%2faclick%3fld%3dTHREE%26rlid%3d3/RK=0/RS=ccc-</ClickUrl>
+</Listing>
+</ResultSet>
+</Results>
